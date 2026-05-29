@@ -168,7 +168,6 @@ class ChatifyMessenger
             ],
             'timeAgo' => $msg->created_at->diffForHumans(),
             'created_at' => $msg->created_at->toIso8601String(),
-            'sent_by' => $msg->sent_by,
             // 'isSender' => ($msg->from_id == auth('api')->user()->id),
             'seen' => $msg->seen,
         ];
@@ -216,7 +215,6 @@ class ChatifyMessenger
         $message->from_id = $data['from_id'];
         $message->to_id = $data['to_id'];
         $message->body = $data['body'];
-        $message->sent_by = $data['sent_by'] ?? null;
         $message->attachment = $data['attachment'];
         $message->save();
         return $message;

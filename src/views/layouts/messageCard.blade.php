@@ -3,7 +3,7 @@ $seenIcon = !!$seen ? 'check-double' : 'check';
 $timeAndSeen =
     "<span data-time='$created_at' class='message-time'>
         " .
-    ($sent_by == 'admin' ? "<span class='fas fa-$seenIcon' seen'></span>" : '') .
+    ($from_id == auth()->id() ? "<span class='fas fa-$seenIcon' seen'></span>" : '') .
     " <span class='time'>$timeAgo</span>
     </span>";
 $audioId = substr(md5(uniqid(mt_rand(), true)), 0, 8);
@@ -11,9 +11,9 @@ $messenger_color = App\Models\Shared\User::first()->messenger_color;
 $senderColor = $messenger_color ? $messenger_color : Chatify::getFallbackColor();
 ?>
 
-<div class="message-card @if ($sent_by == 'admin') mc-sender @endif" data-id="{{ $id }}">
+<div class="message-card @if ($from_id == auth()->id()) mc-sender @endif" data-id="{{ $id }}">
     {{-- Delete Message Button --}}
-    @if ($sent_by == 'admin')
+    @if ($from_id == auth()->id())
         <div class="actions">
             <i class="fas fa-trash delete-btn" data-id="{{ $id }}"></i>
         </div>
@@ -35,7 +35,7 @@ $senderColor = $messenger_color ? $messenger_color : Chatify::getFallbackColor()
             </div>
         @endif
         @if (@$attachment->type == 'image')
-            <div class="image-wrapper" style="text-align: {{ $sent_by == 'admin' ? 'end' : 'start' }}">
+            <div class="image-wrapper" style="text-align: {{ $from_id == auth()->id() ? 'end' : 'start' }}">
                 <div class="image-file chat-image"
                     style="background-image: url('{{ Chatify::getAttachmentUrl($attachment->file) }}')">
                     <div>{{ $attachment->title }}</div>
@@ -51,7 +51,7 @@ $senderColor = $messenger_color ? $messenger_color : Chatify::getFallbackColor()
                     {!! $timeAndSeen !!}
                 </div>
                 <div class="audio-container">
-                    <i class="fas fa-play" style="color: {{ $sent_by == 'admin' ? 'white' : $senderColor }}"
+                    <i class="fas fa-play" style="color: {{ $from_id == auth()->id() ? 'white' : $senderColor }}"
                         id="playBtn{{ $audioId }}" onclick="playAudio(this)" data-audio="{{ $audioId }}"
                         style="color: white;margin-right:5px;"></i>
                     <div id="waveform{{ $audioId }}" style="width: 100%; height: 40px;"></div>
@@ -66,7 +66,7 @@ $senderColor = $messenger_color ? $messenger_color : Chatify::getFallbackColor()
             var audioVar = {}
             audioVar["{{ $audioId }}"] = WaveSurfer.create({
                 container: '#waveform{{ $audioId }}',
-                waveColor: "{{ $sent_by == 'admin' ? '#ffffff' : $senderColor }}",
+                waveColor: "{{ $from_id == auth()->id() ? '#ffffff' : $senderColor }}",
                 progressColor: '#4da8f9',
                 height: 40,
                 cursorWidth: 0,
@@ -78,7 +78,7 @@ $senderColor = $messenger_color ? $messenger_color : Chatify::getFallbackColor()
         } else {
             audioVar["{{ $audioId }}"] = WaveSurfer.create({
                 container: '#waveform{{ $audioId }}',
-                waveColor: "{{ $sent_by == 'admin' ? '#ffffff' : $senderColor }}",
+                waveColor: "{{ $from_id == auth()->id() ? '#ffffff' : $senderColor }}",
                 progressColor: '#4da8f9',
                 height: 40,
                 cursorWidth: 0,
