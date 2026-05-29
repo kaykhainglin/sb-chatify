@@ -216,7 +216,7 @@ class ChatifyMessenger
         $message->from_id = $data['from_id'];
         $message->to_id = $data['to_id'];
         $message->body = $data['body'];
-        $message->sent_by = $data['sent_by'];
+        $message->sent_by = $data['sent_by'] ?? null;
         $message->attachment = $data['attachment'];
         $message->save();
         return $message;
